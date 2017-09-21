@@ -38,7 +38,7 @@ N<br/>
 W<br/>
 C<br/>
 <br/>
-23<br/>
+53<br/>
 <br/>
 字母表示机器人走的路径。N表示向上，S表示向下，W表示向左，E表示向右。数字表示算法遍历过的节点数量。<br/>
 The letters (N, S, W and E) represents the direction of each step the robot walked. The number represens the number of nodes which have been traversed.
