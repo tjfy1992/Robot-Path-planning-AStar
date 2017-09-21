@@ -6,28 +6,28 @@ import java.util.Queue;
 import java.util.Scanner;
 
 public class Robot {
-	//ĞĞÊı
+	//è¡Œæ•°
 	public static int colomnNum;
 	
-	//ÁĞÊı
+	//åˆ—æ•°
 	public static int rowNum;
 	
-	//ÕÏ°­ÎïÊıÁ¿
+	//éšœç¢ç‰©æ•°é‡
 	public static int obstacleNum;
 	
-	//ÓÃÓÚ´æ·ÅstateµÄÓÅÏÈ¼¶¶ÓÁĞ
+	//ç”¨äºå­˜æ”¾stateçš„ä¼˜å…ˆçº§é˜Ÿåˆ—
 	public static Queue<State> priorityQueue;
 	
-	//µØÍ¼
+	//åœ°å›¾
 	public static String[][] map;
 	
-	//»Ò³¾×ø±êÁĞ±í
+	//ç°å°˜åæ ‡åˆ—è¡¨
 	public static List<Point> dirtList;
 	
-	//closeList£¬ÓÃÓÚ´æ·ÅÒÑ¾­´æÔÚµÄstate
+	//closeListï¼Œç”¨äºå­˜æ”¾å·²ç»å­˜åœ¨çš„state
 	public static List<State> closeList;
 	
-	//±éÀú×ÜºÄ·Ñ
+	//éå†æ€»è€—è´¹
 	public static int cost = 0;
 	
 	public static void main(String[] args) {
@@ -47,25 +47,25 @@ public class Robot {
 	    	String line = sc.nextLine();
 	    	for(int j=0; j<colomnNum; j++)
 	    	{
-	    		//Í³¼ÆÕÏ°­ÎïÊıÁ¿
+	    		//ç»Ÿè®¡éšœç¢ç‰©æ•°é‡
 	    		if(line.charAt(j) == '#')
 	    		{	    			
 	    			obstacleNum++;
 	    		}
 	    		
-	    		//½«»Ò³¾¸ñ×Ó×ø±ê´æÈëlistÖĞ
+	    		//å°†ç°å°˜æ ¼å­åæ ‡å­˜å…¥listä¸­
 	    		if(line.charAt(j) == '*')
 	    		{
 	    			dirtList.add(new Point(i, j));
 	    		}
 	    		
-	    		//ÉèÖÃ»úÆ÷ÈË³õÊ¼×ø±ê
+	    		//è®¾ç½®æœºå™¨äººåˆå§‹åæ ‡
 	    		if(line.charAt(j) == '@')
 	    		{
 	    			initialState.setRobotLocation(new Point(i, j));
 	    		}
 	    		
-	    		//³õÊ¼»¯µØÍ¼
+	    		//åˆå§‹åŒ–åœ°å›¾
 	    		map[i][j] = line.charAt(j) + "";
 	    	}
 	    }
@@ -74,28 +74,26 @@ public class Robot {
 	    initialState.setCost(0);
 	    initialState.setFvalue(0 + dirtList.size());
 	    
-	    //ÓÅÏÈ¼¶¶ÓÁĞµÄ×Ô¶¨ÒåComparator,±È½Ï¹æÔòÊÇFvalue½ÏĞ¡µÄstateÅÅÔÚ¶ÓÁĞÇ°Ãæ
+	    //ä¼˜å…ˆçº§é˜Ÿåˆ—çš„è‡ªå®šä¹‰Comparator,æ¯”è¾ƒè§„åˆ™æ˜¯Fvalueè¾ƒå°çš„stateæ’åœ¨é˜Ÿåˆ—å‰é¢
 	    Comparator<State> cmp = new Comparator<State>() {
 	      public int compare(State s1, State s2) {
 	        return s1.getFvalue() - s2.getFvalue();
 	      }
 	    };
 	    
-	    //³õÊ¼»¯ÓÅÏÈ¼¶¶ÓÁĞ
+	    //åˆå§‹åŒ–ä¼˜å…ˆçº§é˜Ÿåˆ—
 	    priorityQueue = new PriorityQueue<State>(5, cmp);
 	    
 	    closeList.add(initialState);
 	    priorityQueue.add(initialState);
 	    cost++;
 	    
-	    //±éÀú¿ªÊ¼
+	    //éå†å¼€å§‹
 	    while(!priorityQueue.isEmpty()){
-	    	//State state = stack.pop();
-	    	
-	    	//È¡³ö¶ÓÁĞÖĞµÚÒ»¸östate
+	    	//å–å‡ºé˜Ÿåˆ—ä¸­ç¬¬ä¸€ä¸ªstate
 	    	State state = priorityQueue.poll();
 	    	
-	    	//Èç¹û´ïµ½Ä¿±ê,Êä³ö½á¹û²¢ÍË³ö
+	    	//å¦‚æœè¾¾åˆ°ç›®æ ‡,è¾“å‡ºç»“æœå¹¶é€€å‡º
 	    	if(isgoal(state)){
 	    		output(state);
 	    		return;
@@ -105,15 +103,15 @@ public class Robot {
 	}
 	
 	public static void calculate(State state){
-		//»ñÈ¡µ±Ç°»úÆ÷ÈËµÄ×ø±ê
+		//è·å–å½“å‰æœºå™¨äººçš„åæ ‡
 		int x = state.getRobotLocation().getX();
 		int y = state.getRobotLocation().getY();
 		
-		//Èç¹ûµ±Ç°µÄµãÊÇ»Ò³¾²¢ÇÒÃ»ÓĞ±»ÇåÀí
+		//å¦‚æœå½“å‰çš„ç‚¹æ˜¯ç°å°˜å¹¶ä¸”æ²¡æœ‰è¢«æ¸…ç†
 		if(map[x][y].equals("*") && !isCleared(new Point(x, y), state.getDirtList())){
 			State newState = new State();
 			List<Point> newdirtList = new ArrayList<Point>();
-			//ÔÚĞÂµÄstateÖĞ,½«»Ò³¾ÁĞ±í¸üĞÂ,¼´È¥µôµ±Ç°µãµÄ×ø±ê
+			//åœ¨æ–°çš„stateä¸­,å°†ç°å°˜åˆ—è¡¨æ›´æ–°,å³å»æ‰å½“å‰ç‚¹çš„åæ ‡
 			for(Point point : state.getDirtList())
 			{
 				if(point.getX() == x && point.getY() == y)
@@ -122,14 +120,15 @@ public class Robot {
 					newdirtList.add(new Point(point.getX(), point.getY()));
 			}
 			newState.setDirtList(newdirtList);
-			//FvalueÎªgvalueºÍhvalueµÄºÍ
-			newState.setFvalue(state.getCost() + newdirtList.size());
+			newState.setCost(state.getCost() + 1);
+			//Fvalueä¸ºgvalueå’Œhvalueçš„å’Œ
+			newState.setFvalue(newState.getCost() + newdirtList.size());
 			newState.setRobotLocation(new Point(x, y));
-			//C´ú±íClean²Ù×÷
+			//Cä»£è¡¨Cleanæ“ä½œ
 			newState.setOperation("C");
 			newState.setPreviousState(state);
 			
-			//ÈôĞÂ²úÉúµÄ×´Ì¬ÓëÈÎÒâÒ»¸ö±éÀú¹ıµÄ×´Ì¬¶¼²»Í¬,Ôò½øÈë¶ÓÁĞ
+			//è‹¥æ–°äº§ç”Ÿçš„çŠ¶æ€ä¸ä»»æ„ä¸€ä¸ªéå†è¿‡çš„çŠ¶æ€éƒ½ä¸åŒ,åˆ™è¿›å…¥é˜Ÿåˆ—
 			if(!isDuplicated(newState)){
 				priorityQueue.add(newState);
 				closeList.add(newState);
@@ -137,7 +136,7 @@ public class Robot {
 			}
 		}
 		
-		//Èôµ±Ç°»úÆ÷ÈË×ø±êÏÂ·½ÓĞ¸ñ×Ó²¢ÇÒ²»ÊÇÕÏ°­Îï
+		//è‹¥å½“å‰æœºå™¨äººåæ ‡ä¸‹æ–¹æœ‰æ ¼å­å¹¶ä¸”ä¸æ˜¯éšœç¢ç‰©
 		if(x + 1 < rowNum)
 		{
 			if(!map[x+1][y].equals("#"))
@@ -145,20 +144,21 @@ public class Robot {
 				State newState = new State();
 				newState.setDirtList(state.getDirtList());
 				newState.setRobotLocation(new Point(x + 1, y));
-				//S´ú±íSouth,¼´ÏòÏÂ·½ÒÆ¶¯Ò»¸ö¸ñ×Ó
+				//Sä»£è¡¨South,å³å‘ä¸‹æ–¹ç§»åŠ¨ä¸€ä¸ªæ ¼å­
 				newState.setOperation("S");
-				newState.setFvalue(state.getCost() + state.getDirtList().size());
+				newState.setCost(state.getCost() + 1);
+				newState.setFvalue(newState.getCost() + state.getDirtList().size());
 				newState.setPreviousState(state);
 				if(!isDuplicated(newState)){
 					priorityQueue.add(newState);
-					//¼ÓÈëµ½closeListÖĞ
+					//åŠ å…¥åˆ°closeListä¸­
 					closeList.add(newState);
 					cost++;
 				}
 			}
 		}
 		
-		//Èôµ±Ç°»úÆ÷ÈË×ø±êÉÏ·½ÓĞ¸ñ×Ó²¢ÇÒ²»ÊÇÕÏ°­Îï
+		//è‹¥å½“å‰æœºå™¨äººåæ ‡ä¸Šæ–¹æœ‰æ ¼å­å¹¶ä¸”ä¸æ˜¯éšœç¢ç‰©
 		if(x - 1 >= 0)
 		{
 			if(!map[x-1][y].equals("#"))
@@ -166,9 +166,10 @@ public class Robot {
 				State newState = new State();
 				newState.setDirtList(state.getDirtList());
 				newState.setRobotLocation(new Point(x - 1, y));
-				//N´ú±íNorth,¼´ÏòÉÏ·½ÒÆ¶¯Ò»¸ö¸ñ×Ó
+				//Nä»£è¡¨North,å³å‘ä¸Šæ–¹ç§»åŠ¨ä¸€ä¸ªæ ¼å­
 				newState.setOperation("N");
-				newState.setFvalue(state.getCost() + state.getDirtList().size());
+				newState.setCost(state.getCost() + 1);
+				newState.setFvalue(newState.getCost() + state.getDirtList().size());
 				newState.setPreviousState(state);
 				if(!isDuplicated(newState)){
 					priorityQueue.add(newState);
@@ -178,7 +179,7 @@ public class Robot {
 			}
 		}
 		
-		//Èôµ±Ç°»úÆ÷ÈË×ø±ê×ó²àÓĞ¸ñ×Ó²¢ÇÒ²»ÊÇÕÏ°­Îï
+		//è‹¥å½“å‰æœºå™¨äººåæ ‡å·¦ä¾§æœ‰æ ¼å­å¹¶ä¸”ä¸æ˜¯éšœç¢ç‰©
 		if(y - 1 >= 0)
 		{
 			if(!map[x][y-1].equals("#"))
@@ -186,9 +187,10 @@ public class Robot {
 				State newState = new State();
 				newState.setDirtList(state.getDirtList());
 				newState.setRobotLocation(new Point(x, y - 1));
-				//W´ú±íWest,¼´Ïò×ó²àÒÆ¶¯Ò»¸ö¸ñ×Ó
+				//Wä»£è¡¨West,å³å‘å·¦ä¾§ç§»åŠ¨ä¸€ä¸ªæ ¼å­
 				newState.setOperation("W");
-				newState.setFvalue(state.getCost() + state.getDirtList().size());
+				newState.setCost(state.getCost() + 1);
+				newState.setFvalue(newState.getCost() + state.getDirtList().size());
 				newState.setPreviousState(state);
 				if(!isDuplicated(newState)){
 					priorityQueue.add(newState);
@@ -198,7 +200,7 @@ public class Robot {
 			}
 		}
 		
-		//Èôµ±Ç°»úÆ÷ÈË×ø±êÓÒ²àÓĞ¸ñ×Ó²¢ÇÒ²»ÊÇÕÏ°­Îï
+		//è‹¥å½“å‰æœºå™¨äººåæ ‡å³ä¾§æœ‰æ ¼å­å¹¶ä¸”ä¸æ˜¯éšœç¢ç‰©
 		if(y + 1 < colomnNum)
 		{
 			if(!map[x][y+1].equals("#"))
@@ -206,9 +208,10 @@ public class Robot {
 				State newState = new State();
 				newState.setDirtList(state.getDirtList());
 				newState.setRobotLocation(new Point(x, y + 1));
-				//E´ú±íEast,¼´ÏòÓÒ²àÒÆ¶¯Ò»¸ö¸ñ×Ó
+				//Eä»£è¡¨East,å³å‘å³ä¾§ç§»åŠ¨ä¸€ä¸ªæ ¼å­
 				newState.setOperation("E");
-				newState.setFvalue(state.getCost() + state.getDirtList().size());
+				newState.setCost(state.getCost() + 1);
+				newState.setFvalue(newState.getCost() + state.getDirtList().size());
 				newState.setPreviousState(state);
 				if(!isDuplicated(newState)){
 					priorityQueue.add(newState);
@@ -221,28 +224,28 @@ public class Robot {
 		
 	}
 	
-	//ÅĞ¶ÏÊÇ·ñÒÑ¾­´ïµ½Ä¿±ê,¼´µ±Ç°±éÀúµ½µÄstateÖĞÊÖ·ñÒÑ¾­Ã»ÓĞ»Ò³¾ĞèÒªÇåÀí
+	//åˆ¤æ–­æ˜¯å¦å·²ç»è¾¾åˆ°ç›®æ ‡,å³å½“å‰éå†åˆ°çš„stateä¸­æ‰‹å¦å·²ç»æ²¡æœ‰ç°å°˜éœ€è¦æ¸…ç†
 	public static boolean isgoal(State state){
 		if(state.getDirtList().isEmpty())
 			return true;
 		return false;
 	}
 	
-	//Êä³ö,ÓÉ×îºóÒ»¸östateÒ»²½Ò»²½»ØËİµ½ÆğÊ¼state
+	//è¾“å‡º,ç”±æœ€åä¸€ä¸ªstateä¸€æ­¥ä¸€æ­¥å›æº¯åˆ°èµ·å§‹state
 	public static void output(State state){
 		String output = "";
-		//»ØËİÆÚ¼ä°ÑÃ¿Ò»¸östateµÄ²Ù×÷(ÓÉÓÚÖ±½ÓÊä³öµÄ»°ÊÇµ¹Ğò)¼ÓÈëµ½output×Ö·û´®Ö®Ç°,ÔÙÊä³öoutput
+		//å›æº¯æœŸé—´æŠŠæ¯ä¸€ä¸ªstateçš„æ“ä½œ(ç”±äºç›´æ¥è¾“å‡ºçš„è¯æ˜¯å€’åº)åŠ å…¥åˆ°outputå­—ç¬¦ä¸²ä¹‹å‰,å†è¾“å‡ºoutput
 		while(state != null){
 			if(state.getOperation() != null)
 				output = state.getOperation() + "\r\n" + output;
 			state = state.getPreviousState();
 		}
 		System.out.println(output);
-		//×îºóÊä³ö±éÀú¹ıµÄ½Úµã(state)ÊıÁ¿
+		//æœ€åè¾“å‡ºéå†è¿‡çš„èŠ‚ç‚¹(state)æ•°é‡
 		System.out.println(cost);
 	}
 	
-	//ÅĞ¶Ï½ÚµãÊÇ·ñ´æÔÚ,¼´½«stateÓëcloseListÖĞµÄstateÏà±È½Ï,Èô¶¼²»ÏàÍ¬ÔòÎªÈ«ĞÂ½Úµã
+	//åˆ¤æ–­èŠ‚ç‚¹æ˜¯å¦å­˜åœ¨,å³å°†stateä¸closeListä¸­çš„stateç›¸æ¯”è¾ƒ,è‹¥éƒ½ä¸ç›¸åŒåˆ™ä¸ºå…¨æ–°èŠ‚ç‚¹
 	public static boolean isDuplicated(State state){
 		for(State state2 : closeList){
 			if(State.isSameState(state, state2))
@@ -251,7 +254,7 @@ public class Robot {
 		return false;
 	}
 	
-	//ÅĞ¶ÏµØÍ¼ÖĞµ±Ç°Î»ÖÃµÄ»Ò³¾ÔÚÕâ¸östateÖĞÊÇ·ñÒÑ¾­±»³ıÈ¥¡£
+	//åˆ¤æ–­åœ°å›¾ä¸­å½“å‰ä½ç½®çš„ç°å°˜åœ¨è¿™ä¸ªstateä¸­æ˜¯å¦å·²ç»è¢«é™¤å»ã€‚
 	public static boolean isCleared(Point point, List<Point> list){
 		for(Point p : list){
 			if(Point.isSamePoint(p, point))
